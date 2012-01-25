@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnCreateAppProfile = new System.Windows.Forms.Button();
             this.btnMapProfileLocally = new System.Windows.Forms.Button();
             this.btnRestore = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.lstAppProfiles = new System.Windows.Forms.ListView();
+            this.ctxMenuAppProfiles = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxMenuRemoveAppProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMenuAppProfiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCreateAppProfile
@@ -44,7 +48,7 @@
             this.btnCreateAppProfile.TabIndex = 0;
             this.btnCreateAppProfile.Text = "1. Create App Profile";
             this.btnCreateAppProfile.UseVisualStyleBackColor = true;
-            this.btnCreateAppProfile.Click += new System.EventHandler(this.btnCreateAppProfile_Click);
+            this.btnCreateAppProfile.Click += new System.EventHandler(this.BtnCreateAppProfileClick);
             // 
             // btnMapProfileLocally
             // 
@@ -54,6 +58,7 @@
             this.btnMapProfileLocally.TabIndex = 1;
             this.btnMapProfileLocally.Text = "2. Map Profile Locally";
             this.btnMapProfileLocally.UseVisualStyleBackColor = true;
+            this.btnMapProfileLocally.Click += new System.EventHandler(this.BtnMapProfileLocallyClick);
             // 
             // btnRestore
             // 
@@ -84,11 +89,28 @@
             // 
             // lstAppProfiles
             // 
+            this.lstAppProfiles.ContextMenuStrip = this.ctxMenuAppProfiles;
+            this.lstAppProfiles.FullRowSelect = true;
             this.lstAppProfiles.Location = new System.Drawing.Point(12, 54);
             this.lstAppProfiles.Name = "lstAppProfiles";
             this.lstAppProfiles.Size = new System.Drawing.Size(296, 428);
             this.lstAppProfiles.TabIndex = 5;
             this.lstAppProfiles.UseCompatibleStateImageBehavior = false;
+            this.lstAppProfiles.View = System.Windows.Forms.View.Details;
+            // 
+            // ctxMenuAppProfiles
+            // 
+            this.ctxMenuAppProfiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxMenuRemoveAppProfile});
+            this.ctxMenuAppProfiles.Name = "ctxMenuAppProfiles";
+            this.ctxMenuAppProfiles.Size = new System.Drawing.Size(180, 26);
+            // 
+            // ctxMenuRemoveAppProfile
+            // 
+            this.ctxMenuRemoveAppProfile.Name = "ctxMenuRemoveAppProfile";
+            this.ctxMenuRemoveAppProfile.Size = new System.Drawing.Size(179, 22);
+            this.ctxMenuRemoveAppProfile.Text = "Remove App Profile";
+            this.ctxMenuRemoveAppProfile.Click += new System.EventHandler(this.CtxMenuRemoveAppProfileClick);
             // 
             // MainForm
             // 
@@ -105,6 +127,7 @@
             this.Text = "DropPrefs";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.MainFormLoad);
+            this.ctxMenuAppProfiles.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,6 +141,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView lstAppProfiles;
+        private System.Windows.Forms.ContextMenuStrip ctxMenuAppProfiles;
+        private System.Windows.Forms.ToolStripMenuItem ctxMenuRemoveAppProfile;
     }
 }
 

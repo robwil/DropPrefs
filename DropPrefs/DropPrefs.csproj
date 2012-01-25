@@ -48,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppProfile.cs" />
+    <Compile Include="CreateAppProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateAppProfile.Designer.cs">
+      <DependentUpon>CreateAppProfile.cs</DependentUpon>
+    </Compile>
     <Compile Include="GlobalPreferences.cs" />
     <Compile Include="InitialSetupForm.cs">
       <SubType>Form</SubType>
@@ -65,6 +71,9 @@
     <Compile Include="PreferenceLocations.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CreateAppProfile.resx">
+      <DependentUpon>CreateAppProfile.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InitialSetupForm.resx">
       <DependentUpon>InitialSetupForm.cs</DependentUpon>
     </EmbeddedResource>

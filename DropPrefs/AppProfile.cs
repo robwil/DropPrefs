@@ -17,6 +17,12 @@ namespace DropPrefs
             AppName = "";
             Files = new List<string>();
         }
+
+        public AppProfile(string appName, List<string> files)
+        {
+            AppName = appName;
+            Files = files;
+        }
     }
 
     [DataContract]

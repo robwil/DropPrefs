@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace DropPrefs
 {
@@ -10,13 +7,11 @@ namespace DropPrefs
     public class GlobalPreferences
     {
         [DataMember]
-        public List<AppProfile> AppProfiles { get; set; }
+        public Dictionary<string, AppProfile> AppProfiles { get; set; }
 
         public GlobalPreferences()
         {
-            AppProfiles = new List<AppProfile>();
+            AppProfiles = new Dictionary<string, AppProfile>();
         }
     }
-
-    
 }

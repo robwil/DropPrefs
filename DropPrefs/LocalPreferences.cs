@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace DropPrefs
 {
@@ -10,11 +7,11 @@ namespace DropPrefs
     public class LocalPreferences
     {        
         [DataMember]
-        public List<LocalAppProfile> LocalAppProfiles { get; set; }
+        public Dictionary<string, LocalAppProfile> LocalAppProfiles { get; set; }
 
         public LocalPreferences()
         {
-            LocalAppProfiles = new List<LocalAppProfile>();
+            LocalAppProfiles = new Dictionary<string, LocalAppProfile>();
         }
     }
 }
