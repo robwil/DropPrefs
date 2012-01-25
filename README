@@ -3,3 +3,5 @@ by Rob Williams
 http://robwilliams.me
 
 Set up Application Profiles for each of your games or programs, specifying the location of their preference files or game saves. The program will move these files to a given location within your Dropbox folder, causing it to be backed up and synced across your computers. The program also sets up a link to the moved file, so that the application using the preference file doesn't even notice a difference. Never again will you lose a save game or preference file when reinstalling Windows.
+
+For now, requires Windows Vista or Windows 7 due to usage of symbolic links.

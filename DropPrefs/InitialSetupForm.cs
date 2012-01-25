@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace DropPrefs
 {
-    public partial class Form1 : Form
+    public partial class InitialSetupForm : Form
     {
-        public Form1()
+        public InitialSetupForm()
         {
             InitializeComponent();
         }
