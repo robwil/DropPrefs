@@ -44,6 +44,7 @@
             this.btnCreateAppProfile.TabIndex = 0;
             this.btnCreateAppProfile.Text = "1. Create App Profile";
             this.btnCreateAppProfile.UseVisualStyleBackColor = true;
+            this.btnCreateAppProfile.Click += new System.EventHandler(this.btnCreateAppProfile_Click);
             // 
             // btnMapProfileLocally
             // 
@@ -102,6 +103,7 @@
             this.Controls.Add(this.btnCreateAppProfile);
             this.Name = "MainForm";
             this.Text = "DropPrefs";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.MainFormLoad);
             this.ResumeLayout(false);
             this.PerformLayout();

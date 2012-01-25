@@ -92,6 +92,7 @@
             this.btnBrowseGlobal.TabIndex = 5;
             this.btnBrowseGlobal.Text = "Browse...";
             this.btnBrowseGlobal.UseVisualStyleBackColor = true;
+            this.btnBrowseGlobal.Click += new System.EventHandler(this.btnBrowseGlobal_Click);
             // 
             // txtGlobalPreferenceFileLocation
             // 
@@ -108,6 +109,7 @@
             this.btnBrowseLocal.TabIndex = 8;
             this.btnBrowseLocal.Text = "Browse...";
             this.btnBrowseLocal.UseVisualStyleBackColor = true;
+            this.btnBrowseLocal.Click += new System.EventHandler(this.btnBrowseLocal_Click);
             // 
             // txtLocalPreferenceFileLocation
             // 

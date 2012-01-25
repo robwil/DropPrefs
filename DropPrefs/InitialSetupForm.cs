@@ -32,6 +32,27 @@ namespace DropPrefs
         {
             folderBrowserDialog.Description = "Please select your Dropbox folder";
             folderBrowserDialog.ShowDialog();
+            txtDropboxFolderLocation.Text = folderBrowserDialog.SelectedPath;
+            _preferenceLocations.DropboxLocation = txtDropboxFolderLocation.Text;
+        }
+
+        private void btnBrowseGlobal_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.Title = "Choose where to save Global Preferences file";
+            saveFileDialog.FileName = "GlobalPrefs.js";
+            saveFileDialog.InitialDirectory = _preferenceLocations.DropboxLocation;
+            saveFileDialog.ShowDialog();
+            txtGlobalPreferenceFileLocation.Text = saveFileDialog.FileName;
+            _preferenceLocations.GlobalPreferenceLocation = txtGlobalPreferenceFileLocation.Text;
+        }
+
+        private void btnBrowseLocal_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.Title = "Choose where to save Local Preferences file";
+            saveFileDialog.FileName = "LocalPrefs.js";
+            saveFileDialog.ShowDialog();
+            txtLocalPreferenceFileLocation.Text = saveFileDialog.FileName;
+            _preferenceLocations.LocalPreferenceLocation = txtLocalPreferenceFileLocation.Text;
         }
     }
 }

@@ -11,6 +11,11 @@ namespace DropPrefs
     {
         [DataMember]
         public List<AppProfile> AppProfiles { get; set; }
+
+        public GlobalPreferences()
+        {
+            AppProfiles = new List<AppProfile>();
+        }
     }
 
     

@@ -11,5 +11,10 @@ namespace DropPrefs
     {        
         [DataMember]
         public List<LocalAppProfile> LocalAppProfiles { get; set; }
+
+        public LocalPreferences()
+        {
+            LocalAppProfiles = new List<LocalAppProfile>();
+        }
     }
 }

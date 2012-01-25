@@ -11,12 +11,25 @@ namespace DropPrefs
 
         [DataMember]
         public List<string> Files { get; set; }
+
+        public AppProfile()
+        {
+            AppName = "";
+            Files = new List<string>();
+        }
     }
 
     [DataContract]
     public class LocalAppProfile : AppProfile
     {
         [DataMember]
-        public List<string> LocalFolder { get; set; } 
+        public string LocalFolder { get; set; }
+ 
+        public LocalAppProfile()
+        {
+            AppName = "";
+            Files = new List<string>();
+            LocalFolder = "";
+        }
     }
 }
