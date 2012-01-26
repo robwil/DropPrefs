@@ -131,6 +131,7 @@
             this.Controls.Add(this.txtAppName);
             this.Name = "CreateAppProfile";
             this.Text = "Create App Profile";
+            this.Load += new System.EventHandler(this.CreateAppProfile_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

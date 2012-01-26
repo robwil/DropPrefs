@@ -3,7 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Windows.Forms;
+
+/**
+ * TODO:
+ *      - Restore feature.
+ *      - Allow re-mapping.
+ *      - Allow un-mapping (move all linked files to original location, deleting sym links).
+ *      - Add compression to JSON files.
+ *      - Crowd Sourcing feature. Will require some srs thinking.
+ **/
 
 namespace DropPrefs
 {
@@ -209,27 +219,60 @@ namespace DropPrefs
          **/
         [DllImport("kernel32.dll")]
         static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
-        //private static int _kSymlinkFlagDirectory = 1;
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int GetFinalPathNameByHandle(IntPtr handle, [In, Out] StringBuilder path, int bufLen, int flags);
 
         /**
          * Perform the actual work to make this program function.
          * Moves the file to the mapped location and then creates a link at the original location.
+         * This method gets run when a profile is first mapped, and then any time the profile gets editted.
+         * Therefore, it needs to be idempotent.
          **/
         private void MoveAndLinkFiles(LocalAppProfile localAppProfile)
         {
             foreach (string filePath in localAppProfile.Files)
             {
+                // Construct new file path (in Dropbox)
                 string fileName = Path.GetFileName(filePath);
                 if (fileName != null)
                 {
-                    // Move file to new path in Dropbox
                     string newPath = localAppProfile.LocalFolder + Path.DirectorySeparatorChar + fileName;
-                    File.Move(filePath, newPath);
 
-                    // Create symbolic link from old path to new path.
-                    if (!CreateSymbolicLink(filePath, newPath, 0))
-                        MessageBox.Show("Failed to create symbolic link from " + newPath + " to " + filePath,
-                                        "Error: Failed to create link", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Check if file is already link
+                    FileAttributes attributes = File.GetAttributes(filePath);
+                    if (attributes.HasFlag(FileAttributes.ReparsePoint))
+                    {
+                        //using (FileStream fs = File.OpenRead(filePath))
+                        // {
+                        //      // get the target of the symbolic link
+                        //     StringBuilder path = new StringBuilder(512);
+                        //    GetFinalPathNameByHandle(fs.SafeFileHandle.DangerousGetHandle(), path, path.Capacity, 0);
+                        //     fs.Close();
+                        //    string linkTargetPath = path.ToString();
+                        //     // delete the symbolic link, then move target file to symbolic link location
+                        //File.Delete(filePath);
+                        //File.Move(newPath, filePath);
+
+                        ; // Do nothing
+                    }
+                    else
+                    {
+
+                        // Move file to new path in Dropbox
+                        File.Move(filePath, newPath);
+
+                        // Create symbolic link from old path to new path.
+                        if (!CreateSymbolicLink(filePath, newPath, 0))
+                            MessageBox.Show("Failed to create symbolic link from " + newPath + " to " + filePath,
+                                            "Error: Failed to create link", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Problem with filename parsing. Make sure you use the browse windows to enter all directory and filenames.",
+                        "Error: Failed to Parse Filename", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 }
             }
         }
@@ -256,18 +299,66 @@ namespace DropPrefs
             }
         }
 
+        /**
+         * When the user right-clicks an App Profile and chooses Edit, launch the
+         * Create App Profile form with the existing information preloaded.
+         **/
+        private void CtxMenuEditAppProfileClick(object sender, EventArgs e)
+        {
+            if (lstAppProfiles.SelectedItems.Count != 1)
+            {
+                MessageBox.Show(this, "Please select exactly one App Profile before trying to edit it.",
+                                "Error: Too Many or Too Few Selected Profiles", MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get the AppProfile which corresponds with the selected row
+            ListViewItem selectedItem = lstAppProfiles.SelectedItems[0];
+            string appName = selectedItem.Text;
+            AppProfile appProfile = _globalPreferences.AppProfiles[appName];
+
+            // Launch the Create App Profile form with the existing profile pre-filled
+            CreateAppProfile form = new CreateAppProfile(appProfile);
+            form.ShowDialog();
+
+            // Handle the changes, if they were saved (making them non-null).
+            if (form.NewAppProfile != null)
+            {
+                // Remove the profile from Global Preferences keyed by old App Name (in case the name changed)
+                _globalPreferences.AppProfiles.Remove(appName);
+                // Insert the new App Profile to Global Prefs
+                _globalPreferences.AppProfiles.Add(form.NewAppProfile.AppName, form.NewAppProfile);
+                // update Local Preferences if needed
+                if (_localPreferences.LocalAppProfiles.ContainsKey(appName))
+                {
+                    string localFolder = _localPreferences.LocalAppProfiles[appName].LocalFolder;
+                    _localPreferences.LocalAppProfiles.Remove(appName);
+                    _localPreferences.LocalAppProfiles.Add(form.NewAppProfile.AppName, new LocalAppProfile(form.NewAppProfile, localFolder));
+                    // Since mapped files may have changed, remap them.
+                    MoveAndLinkFiles(_localPreferences.LocalAppProfiles[form.NewAppProfile.AppName]);
+                }
+                // Update screen
+                UpdateAppProfileView();
+            }
+        }
+
+        /**
+         * When the user right-clicks an App Profile and chooses Remove, delete it from
+         * the Global/Local preferences and the screen (ListView).
+         **/
         private void CtxMenuRemoveAppProfileClick(object sender, EventArgs e)
         {
             // For each selected item, delete it from both the screen (ListView)
-            // and Global (or Local) Preferences
+            // and Global (and/or Local) Preferences
             foreach(ListViewItem appProfileItem in lstAppProfiles.SelectedItems)
             {
                 string key = appProfileItem.Text;
                 lstAppProfiles.Items.RemoveAt(appProfileItem.Index);
                 _globalPreferences.AppProfiles.Remove(key);
+                _localPreferences.LocalAppProfiles.Remove(key);
             }
         }
-
         
     }
 }

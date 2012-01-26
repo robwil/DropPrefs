@@ -37,6 +37,7 @@
             this.lstAppProfiles = new System.Windows.Forms.ListView();
             this.ctxMenuAppProfiles = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxMenuRemoveAppProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMenuEditAppProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuAppProfiles.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,9 +102,10 @@
             // ctxMenuAppProfiles
             // 
             this.ctxMenuAppProfiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxMenuEditAppProfile,
             this.ctxMenuRemoveAppProfile});
             this.ctxMenuAppProfiles.Name = "ctxMenuAppProfiles";
-            this.ctxMenuAppProfiles.Size = new System.Drawing.Size(180, 26);
+            this.ctxMenuAppProfiles.Size = new System.Drawing.Size(180, 70);
             // 
             // ctxMenuRemoveAppProfile
             // 
@@ -111,6 +113,13 @@
             this.ctxMenuRemoveAppProfile.Size = new System.Drawing.Size(179, 22);
             this.ctxMenuRemoveAppProfile.Text = "Remove App Profile";
             this.ctxMenuRemoveAppProfile.Click += new System.EventHandler(this.CtxMenuRemoveAppProfileClick);
+            // 
+            // ctxMenuEditAppProfile
+            // 
+            this.ctxMenuEditAppProfile.Name = "ctxMenuEditAppProfile";
+            this.ctxMenuEditAppProfile.Size = new System.Drawing.Size(179, 22);
+            this.ctxMenuEditAppProfile.Text = "Edit App Profile";
+            this.ctxMenuEditAppProfile.Click += new System.EventHandler(this.CtxMenuEditAppProfileClick);
             // 
             // MainForm
             // 
@@ -143,6 +152,7 @@
         private System.Windows.Forms.ListView lstAppProfiles;
         private System.Windows.Forms.ContextMenuStrip ctxMenuAppProfiles;
         private System.Windows.Forms.ToolStripMenuItem ctxMenuRemoveAppProfile;
+        private System.Windows.Forms.ToolStripMenuItem ctxMenuEditAppProfile;
     }
 }
 
