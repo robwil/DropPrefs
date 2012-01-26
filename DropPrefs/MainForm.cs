@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Json;
 using System.Windows.Forms;
 
@@ -204,6 +205,13 @@ namespace DropPrefs
         }
 
         /**
+         * Import CreateSymbolicLink API call
+         **/
+        [DllImport("kernel32.dll")]
+        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
+        //private static int _kSymlinkFlagDirectory = 1;
+
+        /**
          * Perform the actual work to make this program function.
          * Moves the file to the mapped location and then creates a link at the original location.
          **/
@@ -214,7 +222,14 @@ namespace DropPrefs
                 string fileName = Path.GetFileName(filePath);
                 if (fileName != null)
                 {
-                    File.Move(filePath, localAppProfile.LocalFolder + Path.DirectorySeparatorChar + fileName);
+                    // Move file to new path in Dropbox
+                    string newPath = localAppProfile.LocalFolder + Path.DirectorySeparatorChar + fileName;
+                    File.Move(filePath, newPath);
+
+                    // Create symbolic link from old path to new path.
+                    if (!CreateSymbolicLink(filePath, newPath, 0))
+                        MessageBox.Show("Failed to create symbolic link from " + newPath + " to " + filePath,
+                                        "Error: Failed to create link", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
