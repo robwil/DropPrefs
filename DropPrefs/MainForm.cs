@@ -171,18 +171,52 @@ namespace DropPrefs
         }
 
         /**
-         * Map Profile Locally button was clicked, so launch the appropriate form.
+         * Map Profile button was clicked, so launch the appropriate form.
          **/
         private void BtnMapProfileLocallyClick(object sender, EventArgs e)
         {
             if (lstAppProfiles.SelectedItems.Count != 1)
             {
-                MessageBox.Show(this, "Please select exactly one App Profile before trying to map it locally.",
+                MessageBox.Show(this, "Please select exactly one App Profile before trying to map it.",
                                 "Error: Too Many or Too Few Selected Profiles", MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
                 return;
             }
 
+            // determine App Name of selected ListViewItem
+            ListViewItem selectedItem = lstAppProfiles.SelectedItems[0];
+            string appName = selectedItem.Text;
+            AppProfile appProfile = _globalPreferences.AppProfiles[appName];
+
+            // create and launch Map Profile dialog
+            MapProfile form = new MapProfile(_preferenceLocations, appProfile);
+            form.ShowDialog();
+
+            // If the user pressed 'Save' the NewAppProfile will be non-null, so let's save it.
+            if (form.NewAppProfile != null)
+            {
+                _localPreferences.LocalAppProfiles.Add(form.NewAppProfile.AppName, form.NewAppProfile);
+                // Move the file to the mapped location, and create the actual file link
+                MoveAndLinkFiles(form.NewAppProfile);
+                // Force refresh of ListView with newly added profile.
+                UpdateAppProfileView();
+            }
+        }
+
+        /**
+         * Perform the actual work to make this program function.
+         * Moves the file to the mapped location and then creates a link at the original location.
+         **/
+        private void MoveAndLinkFiles(LocalAppProfile localAppProfile)
+        {
+            foreach (string filePath in localAppProfile.Files)
+            {
+                string fileName = Path.GetFileName(filePath);
+                if (fileName != null)
+                {
+                    File.Move(filePath, localAppProfile.LocalFolder + Path.DirectorySeparatorChar + fileName);
+                }
+            }
         }
 
         /**
@@ -201,8 +235,8 @@ namespace DropPrefs
             {
                 ListViewItem newItem = lstAppProfiles.Items.Add(pair.Key);
                 newItem.SubItems.Add(_localPreferences.LocalAppProfiles.ContainsKey(pair.Key)
-                                         ? "Local (mapped)"
-                                         : "Global (not mapped)");
+                                         ? "Mapped"
+                                         : "Not Mapped");
                 seenProfilesNames.Add(pair.Key);
             }
         }

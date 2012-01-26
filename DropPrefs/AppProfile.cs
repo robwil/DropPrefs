@@ -37,5 +37,12 @@ namespace DropPrefs
             Files = new List<string>();
             LocalFolder = "";
         }
+
+        public LocalAppProfile(AppProfile appProfile, string localFolder)
+        {
+            AppName = appProfile.AppName;
+            Files = new List<string>(appProfile.Files);
+            LocalFolder = localFolder;
+        }
     }
 }

@@ -33,11 +33,11 @@
             this.txtAppName = new System.Windows.Forms.TextBox();
             this.tooltips = new System.Windows.Forms.ToolTip(this.components);
             this.label2 = new System.Windows.Forms.Label();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.btnClearFiles = new System.Windows.Forms.Button();
             this.lstLinkedFiles = new System.Windows.Forms.ListBox();
             this.btnSaveAppProfile = new System.Windows.Forms.Button();
-            this.btnBrowse = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.btnClearFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -53,6 +53,8 @@
             // 
             // txtAppName
             // 
+            this.txtAppName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAppName.Location = new System.Drawing.Point(15, 25);
             this.txtAppName.Name = "txtAppName";
             this.txtAppName.Size = new System.Drawing.Size(317, 20);
@@ -69,8 +71,32 @@
             this.tooltips.SetToolTip(this.label2, "Browse for the files you want to link to this application\'s profile. You can use " +
                     "the \'Add to Files\' multiple times to select files from more than one directory.");
             // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(15, 64);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowse.TabIndex = 7;
+            this.btnBrowse.Text = "Add Files...";
+            this.tooltips.SetToolTip(this.btnBrowse, "Add files to the Linked Files. Hold control to select multiple files.");
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.BtnBrowseClick);
+            // 
+            // btnClearFiles
+            // 
+            this.btnClearFiles.Location = new System.Drawing.Point(97, 63);
+            this.btnClearFiles.Name = "btnClearFiles";
+            this.btnClearFiles.Size = new System.Drawing.Size(75, 23);
+            this.btnClearFiles.TabIndex = 8;
+            this.btnClearFiles.Text = "Clear Files";
+            this.tooltips.SetToolTip(this.btnClearFiles, "Clear all linked files, essentially starting over.");
+            this.btnClearFiles.UseVisualStyleBackColor = true;
+            this.btnClearFiles.Click += new System.EventHandler(this.BtnClearFilesClick);
+            // 
             // lstLinkedFiles
             // 
+            this.lstLinkedFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.lstLinkedFiles.FormattingEnabled = true;
             this.lstLinkedFiles.Location = new System.Drawing.Point(15, 93);
             this.lstLinkedFiles.Name = "lstLinkedFiles";
@@ -87,31 +113,9 @@
             this.btnSaveAppProfile.UseVisualStyleBackColor = true;
             this.btnSaveAppProfile.Click += new System.EventHandler(this.BtnSaveAppProfileClick);
             // 
-            // btnBrowse
-            // 
-            this.btnBrowse.Location = new System.Drawing.Point(15, 64);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowse.TabIndex = 7;
-            this.btnBrowse.Text = "Add Files...";
-            this.tooltips.SetToolTip(this.btnBrowse, "Add files to the Linked Files. Hold control to select multiple files.");
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.BtnBrowseClick);
-            // 
             // openFileDialog
             // 
             this.openFileDialog.Multiselect = true;
-            // 
-            // btnClearFiles
-            // 
-            this.btnClearFiles.Location = new System.Drawing.Point(97, 63);
-            this.btnClearFiles.Name = "btnClearFiles";
-            this.btnClearFiles.Size = new System.Drawing.Size(75, 23);
-            this.btnClearFiles.TabIndex = 8;
-            this.btnClearFiles.Text = "Clear Files";
-            this.tooltips.SetToolTip(this.btnClearFiles, "Clear all linked files, essentially starting over.");
-            this.btnClearFiles.UseVisualStyleBackColor = true;
-            this.btnClearFiles.Click += new System.EventHandler(this.BtnClearFilesClick);
             // 
             // CreateAppProfile
             // 

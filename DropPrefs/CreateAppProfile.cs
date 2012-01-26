@@ -18,6 +18,8 @@ namespace DropPrefs
 
         private void BtnBrowseClick(object sender, EventArgs e)
         {
+            openFileDialog.Reset();
+            openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
 
             foreach (string fileName in openFileDialog.FileNames)

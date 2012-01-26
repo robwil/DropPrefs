@@ -56,7 +56,7 @@
             this.btnMapProfileLocally.Name = "btnMapProfileLocally";
             this.btnMapProfileLocally.Size = new System.Drawing.Size(145, 23);
             this.btnMapProfileLocally.TabIndex = 1;
-            this.btnMapProfileLocally.Text = "2. Map Profile Locally";
+            this.btnMapProfileLocally.Text = "2. Map App Profile";
             this.btnMapProfileLocally.UseVisualStyleBackColor = true;
             this.btnMapProfileLocally.Click += new System.EventHandler(this.BtnMapProfileLocallyClick);
             // 
@@ -66,7 +66,7 @@
             this.btnRestore.Name = "btnRestore";
             this.btnRestore.Size = new System.Drawing.Size(145, 23);
             this.btnRestore.TabIndex = 2;
-            this.btnRestore.Text = "3. Restore";
+            this.btnRestore.Text = "3. Restore Linked Files";
             this.btnRestore.UseVisualStyleBackColor = true;
             // 
             // label1
@@ -124,7 +124,7 @@
             this.Controls.Add(this.btnMapProfileLocally);
             this.Controls.Add(this.btnCreateAppProfile);
             this.Name = "MainForm";
-            this.Text = "DropPrefs";
+            this.Text = "DropPrefs by Rob Williams";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.MainFormLoad);
             this.ctxMenuAppProfiles.ResumeLayout(false);
