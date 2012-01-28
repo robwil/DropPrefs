@@ -36,13 +36,15 @@ namespace DropPrefs
         private void MainFormLoad(object sender, EventArgs e)
         {
             // Attempt to load preference files. If it fails, loads up Initial Setup Form.
-            if (LoadPreferences())
+            bool isFirstRun = true;
+            while (LoadPreferences(isFirstRun))
             {
                 InitialSetupForm form = new InitialSetupForm(_preferenceLocations);
                 form.ShowDialog();
-                // Save preferences for first (or perhaps subsequent) time, just in case.
-                CreateOrSavePreferences();
+                isFirstRun = false;
             }
+            // Save preferences for first (or perhaps subsequent) time, just in case.
+            CreateOrSavePreferences();
 
             // Setup columns for App Profiles ListView.
             lstAppProfiles.Columns.Add("Application Name", 150);
@@ -58,15 +60,18 @@ namespace DropPrefs
          *
          * Returns 'true' if the program should show Initial Setup dialog.
          **/
-        private bool LoadPreferences()
-        {            
-            // Read PreferenceLocations.js file and deserialize into PreferenceLocations object for easier usage.            
-            using (FileStream fileStream = new FileStream(_kPreferenceLocationFileName, FileMode.OpenOrCreate, FileAccess.Read))
+        private bool LoadPreferences(bool isFirstRun)
+        {
+            if (isFirstRun)
             {
-                if (fileStream.Length == 0)
-                    return true;
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(PreferenceLocations));
-                _preferenceLocations = serializer.ReadObject(fileStream) as PreferenceLocations;                
+                // Read PreferenceLocations.js file and deserialize into PreferenceLocations object for easier usage.            
+                using (FileStream fileStream = new FileStream(_kPreferenceLocationFileName, FileMode.OpenOrCreate, FileAccess.Read))
+                {
+                    if (fileStream.Length == 0)
+                        return true;
+                    DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof (PreferenceLocations));
+                    _preferenceLocations = serializer.ReadObject(fileStream) as PreferenceLocations;
+                }
             }
 
             // Check if each of the locations are specified. If any are missing, set isMissing to true.
@@ -237,34 +242,36 @@ namespace DropPrefs
                 {
                     string newPath = localAppProfile.LocalFolder + Path.DirectorySeparatorChar + fileName;
 
-                    // Check if file is already link
-                    FileAttributes attributes = File.GetAttributes(filePath);
-                    if (attributes.HasFlag(FileAttributes.ReparsePoint))
+                    // Create directory if needed
+                    string fileDirectory = Path.GetDirectoryName(filePath);
+                    if (fileDirectory != null)
                     {
-                        //using (FileStream fs = File.OpenRead(filePath))
-                        // {
-                        //      // get the target of the symbolic link
-                        //     StringBuilder path = new StringBuilder(512);
-                        //    GetFinalPathNameByHandle(fs.SafeFileHandle.DangerousGetHandle(), path, path.Capacity, 0);
-                        //     fs.Close();
-                        //    string linkTargetPath = path.ToString();
-                        //     // delete the symbolic link, then move target file to symbolic link location
-                        //File.Delete(filePath);
-                        //File.Move(newPath, filePath);
-
-                        // Do nothing
+                        DirectoryInfo directoryInfo = Directory.CreateDirectory(fileDirectory);
+                        if (!directoryInfo.Exists)
+                        {
+                            MessageBox.Show("Failed to create directory: " + fileDirectory,
+                                            "Error: Failed to create directory", MessageBoxButtons.OK,
+                                            MessageBoxIcon.Error);
+                        }
                     }
-                    else
+
+                    // If file already exists, but isn't a link, then move it to Dropbox.
+                    // This will be the case when linking the profile for the first time.
+                    // This will be false when restoring on a new computer.
+                    if (File.Exists(filePath))
                     {
-
-                        // Move file to new path in Dropbox
-                        File.Move(filePath, newPath);
-
-                        // Create symbolic link from old path to new path.
-                        if (!CreateSymbolicLink(filePath, newPath, 0))
-                            MessageBox.Show("Failed to create symbolic link from " + newPath + " to " + filePath,
-                                            "Error: Failed to create link", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        FileAttributes attributes = File.GetAttributes(filePath);
+                        if (!attributes.HasFlag(FileAttributes.ReparsePoint))
+                        {
+                            // Move file to new path in Dropbox
+                            File.Move(filePath, newPath);
+                        }
                     }
+
+                    // Create symbolic link from old path to new path.
+                    if (!CreateSymbolicLink(filePath, newPath, 0))
+                        MessageBox.Show("Failed to create symbolic link from " + newPath + " to " + filePath,
+                                        "Error: Failed to create link", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else
                 {
@@ -288,6 +295,7 @@ namespace DropPrefs
             // Store the profile names (keys) we've seen so we don't display it twice when doing LocalAppProfiles
             List<string> seenProfilesNames = new List<string>();
 
+            // Show Global Preferences
             foreach (KeyValuePair<string, AppProfile> pair in _globalPreferences.AppProfiles)
             {
                 ListViewItem newItem = lstAppProfiles.Items.Add(pair.Key);
@@ -295,6 +303,16 @@ namespace DropPrefs
                                          ? "Mapped"
                                          : "Not Mapped");
                 seenProfilesNames.Add(pair.Key);
+            }
+
+            // Show Local Preferences
+            foreach (KeyValuePair<string, LocalAppProfile> pair in _localPreferences.LocalAppProfiles)
+            {
+                if (!seenProfilesNames.Contains(pair.Key))
+                {
+                    ListViewItem newItem = lstAppProfiles.Items.Add(pair.Key);
+                    newItem.SubItems.Add("Mapped");
+                }
             }
         }
 
@@ -357,6 +375,25 @@ namespace DropPrefs
                 _globalPreferences.AppProfiles.Remove(key);
                 _localPreferences.LocalAppProfiles.Remove(key);
             }
+        }
+
+        private void BtnRestoreClick(object sender, EventArgs e)
+        {
+            if (lstAppProfiles.SelectedItems.Count != 1)
+            {
+                MessageBox.Show(this, "Please select exactly one App Profile before trying to restore it.",
+                                "Error: Too Many or Too Few Selected Profiles", MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get the LocalAppProfile which corresponds with the selected row
+            ListViewItem selectedItem = lstAppProfiles.SelectedItems[0];
+            string appName = selectedItem.Text;
+            LocalAppProfile appProfile = _localPreferences.LocalAppProfiles[appName];
+
+            // MoveAndLinkFiles will do everything Restore needs
+            MoveAndLinkFiles(appProfile);
         }
         
     }

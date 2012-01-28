@@ -36,8 +36,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lstAppProfiles = new System.Windows.Forms.ListView();
             this.ctxMenuAppProfiles = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ctxMenuRemoveAppProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuEditAppProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMenuRemoveAppProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuAppProfiles.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +69,7 @@
             this.btnRestore.TabIndex = 2;
             this.btnRestore.Text = "3. Restore Linked Files";
             this.btnRestore.UseVisualStyleBackColor = true;
+            this.btnRestore.Click += new System.EventHandler(this.BtnRestoreClick);
             // 
             // label1
             // 
@@ -107,19 +108,19 @@
             this.ctxMenuAppProfiles.Name = "ctxMenuAppProfiles";
             this.ctxMenuAppProfiles.Size = new System.Drawing.Size(180, 70);
             // 
-            // ctxMenuRemoveAppProfile
-            // 
-            this.ctxMenuRemoveAppProfile.Name = "ctxMenuRemoveAppProfile";
-            this.ctxMenuRemoveAppProfile.Size = new System.Drawing.Size(179, 22);
-            this.ctxMenuRemoveAppProfile.Text = "Remove App Profile";
-            this.ctxMenuRemoveAppProfile.Click += new System.EventHandler(this.CtxMenuRemoveAppProfileClick);
-            // 
             // ctxMenuEditAppProfile
             // 
             this.ctxMenuEditAppProfile.Name = "ctxMenuEditAppProfile";
             this.ctxMenuEditAppProfile.Size = new System.Drawing.Size(179, 22);
             this.ctxMenuEditAppProfile.Text = "Edit App Profile";
             this.ctxMenuEditAppProfile.Click += new System.EventHandler(this.CtxMenuEditAppProfileClick);
+            // 
+            // ctxMenuRemoveAppProfile
+            // 
+            this.ctxMenuRemoveAppProfile.Name = "ctxMenuRemoveAppProfile";
+            this.ctxMenuRemoveAppProfile.Size = new System.Drawing.Size(179, 22);
+            this.ctxMenuRemoveAppProfile.Text = "Remove App Profile";
+            this.ctxMenuRemoveAppProfile.Click += new System.EventHandler(this.CtxMenuRemoveAppProfileClick);
             // 
             // MainForm
             // 
