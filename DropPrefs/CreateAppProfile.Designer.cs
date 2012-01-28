@@ -130,8 +130,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtAppName);
             this.Name = "CreateAppProfile";
-            this.Text = "Create App Profile";
-            this.Load += new System.EventHandler(this.CreateAppProfile_Load);
+            this.Text = "Create App Profile";            
             this.ResumeLayout(false);
             this.PerformLayout();
 

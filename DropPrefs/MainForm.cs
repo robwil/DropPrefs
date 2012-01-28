@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Windows.Forms;
 
 /**
@@ -219,8 +218,8 @@ namespace DropPrefs
          **/
         [DllImport("kernel32.dll")]
         static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern int GetFinalPathNameByHandle(IntPtr handle, [In, Out] StringBuilder path, int bufLen, int flags);
+        //[DllImport("kernel32.dll", SetLastError = true)]
+        //static extern int GetFinalPathNameByHandle(IntPtr handle, [In, Out] StringBuilder path, int bufLen, int flags);
 
         /**
          * Perform the actual work to make this program function.
@@ -253,7 +252,7 @@ namespace DropPrefs
                         //File.Delete(filePath);
                         //File.Move(newPath, filePath);
 
-                        ; // Do nothing
+                        // Do nothing
                     }
                     else
                     {

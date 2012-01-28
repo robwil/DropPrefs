@@ -6,6 +6,7 @@ DropPrefs/publish/
 #User Specific Files
 *.user
 *.suo
+DropPrefs/*.DotSettings
 
 #Resource Caches
 _ReSharper.*
